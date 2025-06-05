@@ -8,6 +8,9 @@ This repository collects small Unity scripts that can be easily integrated into 
 - Basic movement and rotation helpers
 - Utility functions for referencing game objects
 - Common gameplay patterns for rapid prototyping
+- Plug-and-play audio and scene utilities
+## Essential Scripts
+The `EssentialScripts` folder contains quick-drop components for common tasks like audio volume control and scene loading.
 
 ## Usage
 1. Download the individual scripts you want from this repository.
