@@ -12,6 +12,9 @@ This repository collects small Unity scripts that can be easily integrated into 
 ## Essential Scripts
 The `EssentialScripts` folder contains quick-drop components for common tasks like audio volume control and scene loading.
 
+## Networking
+Scripts related to multiplayer features live in the `Networking` folder. The `FishNet` subfolder includes components specifically for the FishNet networking library.
+
 ## Usage
 1. Download the individual scripts you want from this repository.
 2. Drop the scripts into your Unity project's **Assets** folder.
