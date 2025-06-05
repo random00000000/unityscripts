@@ -10,19 +10,8 @@ This repository collects small Unity scripts that can be easily integrated into 
 - Common gameplay patterns for rapid prototyping
 
 ## Usage
-1. Clone the repository or copy the scripts you need.
+1. Download the individual scripts you want from this repository.
 2. Drop the scripts into your Unity project's **Assets** folder.
 3. Attach a script component to a GameObject.
 4. Tweak its fields in the Inspector to see immediate changes.
 
-## Memes
-Because no README is complete without a little fun:
-
-> It's dangerous to go alone! Take this script.
-
-![One does not simply](https://i.imgflip.com/1bij.jpg)
-
-```
-Keep calm and code on.
- ┏(-_-)┛┗(-_-)┓
-```
