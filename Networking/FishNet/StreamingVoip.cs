@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using FishNet.Object;
 using FishNet.Transporting;
+using FishNet.Connection;
 
 /// <summary>
 /// Push-to-talk voice chat that streams audio data while the key
@@ -117,16 +118,40 @@ public class StreamingVoip : NetworkBehaviour
     [ServerRpc]
     private void SendVoiceServerRpc(float[] data, int channels, int frequency, Channel channel = Channel.Unreliable)
     {
-        ReceiveVoiceObserversRpc(data, channels, frequency);
+        // Get all connected clients
+        var connections = ServerManager.Clients;
+        var speakerPosition = transform.position;
+
+        // Only send to clients within range
+        foreach (var connection in connections)
+        {
+            if (connection.Value == null) continue;
+
+            // Get the client's player object
+            var clientPlayer = connection.Value.FirstObject;
+            if (clientPlayer == null) continue;
+
+            // Calculate distance between speaker and listener
+            float distance = Vector3.Distance(speakerPosition, clientPlayer.transform.position);
+
+            // Only send if within maxHearDistance
+            if (distance <= maxHearDistance)
+            {
+                // Calculate volume based on distance
+                float volume = Mathf.Lerp(1f, minVolume, distance / maxHearDistance);
+                ReceiveVoiceTargetRpc(connection.Value, data, channels, frequency, volume);
+            }
+        }
     }
 
-    [ObserversRpc]
-    private void ReceiveVoiceObserversRpc(float[] data, int channels, int frequency)
+    [TargetRpc]
+    private void ReceiveVoiceTargetRpc(NetworkConnection target, float[] data, int channels, int frequency, float volume)
     {
         if (!IsOwner)
         {
             AudioClip clip = AudioClip.Create("remote", data.Length / channels, channels, frequency, false);
             clip.SetData(data, 0);
+            audioSource.volume = volume;
             audioSource.PlayOneShot(clip);
         }
     }
