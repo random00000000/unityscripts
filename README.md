@@ -9,7 +9,7 @@ This repository collects small Unity scripts that can be easily integrated into 
 - Utility functions for referencing game objects
 - Common gameplay patterns for rapid prototyping
 - Plug-and-play audio and scene utilities
-- Push-to-talk voice chat
+- Push-to-talk voice chat (recorded and streaming)
 ## Essential Scripts
 The `EssentialScripts` folder contains quick-drop components for common tasks like audio volume control and scene loading.
 
