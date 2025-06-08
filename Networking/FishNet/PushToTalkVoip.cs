@@ -1,16 +1,17 @@
 using System.Collections;
 using UnityEngine;
 using FishNet.Object;
+using FishNet.Transporting;
 
 /// <summary>
-/// Very basic push-to-talk voice chat using FishNet.
+/// Proximity-based push-to-talk voice chat using FishNet.
 /// Hold the configured key to record audio and transmit
 /// it to all observers. Others will hear the clip played
-/// back from this object.
+/// back from this object, with volume based on distance.
 /// </summary>
-[RequireComponent(typeof(AudioSource))]
 public class PushToTalkVoip : NetworkBehaviour
 {
+    [Header("Voice Settings")]
     [Tooltip("Key used for voice chat")]
     public KeyCode talkKey = KeyCode.V;
 
@@ -20,14 +21,41 @@ public class PushToTalkVoip : NetworkBehaviour
     [Tooltip("Maximum length of a single transmission in seconds")]
     public float maxRecordTime = 5f;
 
-    private AudioSource audioSource;
+    [Header("Proximity Settings")]
+    [Tooltip("Maximum distance at which voice can be heard")]
+    public float maxHearDistance = 20f;
+
+    [Tooltip("Minimum volume at max distance (0-1)")]
+    [Range(0f, 1f)]
+    public float minVolume = 0.1f;
+
+    [Tooltip("AudioSource component that will play received voice data")]
+    [SerializeField] private AudioSource audioSource;
+
     private string micName;
     private AudioClip recording;
+    private Transform localPlayerTransform;
 
     private void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            Debug.LogError("AudioSource component not assigned to PushToTalkVoip!");
+            enabled = false;
+            return;
+        }
+        
         audioSource.loop = false;
+        audioSource.spatialBlend = 1f; // Enable 3D spatial audio
+        audioSource.rolloffMode = AudioRolloffMode.Linear;
+        audioSource.minDistance = 1f;
+        audioSource.maxDistance = maxHearDistance;
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        localPlayerTransform = transform;
     }
 
     private void Update()
@@ -80,8 +108,19 @@ public class PushToTalkVoip : NetworkBehaviour
     [ObserversRpc]
     private void ReceiveVoiceObserversRpc(float[] data, int channels, int frequency)
     {
-        AudioClip clip = AudioClip.Create("remote", data.Length / channels, channels, frequency, false);
-        clip.SetData(data, 0);
-        audioSource.PlayOneShot(clip);
+        if (!IsOwner)
+        {
+            AudioClip clip = AudioClip.Create("remote", data.Length / channels, channels, frequency, false);
+            clip.SetData(data, 0);
+            audioSource.PlayOneShot(clip);
+        }
+    }
+
+    private void OnValidate()
+    {
+        if (audioSource != null)
+        {
+            audioSource.maxDistance = maxHearDistance;
+        }
     }
 }
