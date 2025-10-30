@@ -1,0 +1,12 @@
+{
+    "editor.defaultFormatter": "ms-dotnettools.csharp",
+    "editor.formatOnSave": true,
+    "csharp.format.enable": true,
+    "csharp.format.indentationSize": 4,
+    "csharp.format.newLine.beforeOpenBrace": "all",
+    "csharp.referencesCodeLens.enabled": true,
+    "dotnet.defaultSolution": "",
+    "files.associations": {
+        "*.cs": "csharp"
+    }
+}
