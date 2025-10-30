@@ -22,3 +22,7 @@ Scripts related to multiplayer features live in the `Networking` folder. The `Fi
 3. Attach a script component to a GameObject.
 4. Tweak its fields in the Inspector to see immediate changes.
 
+## VS Code setup
+
+If you prefer working in Visual Studio Code, the repository now includes a `.vscode` folder with recommended extensions and editor settings tailored for Unity C# scripts. When you open the folder in VS Code you will be prompted to install the recommendations, which ensure consistent formatting and helpful linting while you build your Cursor competitor.
+
